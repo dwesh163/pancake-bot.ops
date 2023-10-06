@@ -1,0 +1,6 @@
+- name: pancake-bot
+  hosts: all
+  roles:
+    - name: pancake-bot
+  tags:
+    - pancake-bot
