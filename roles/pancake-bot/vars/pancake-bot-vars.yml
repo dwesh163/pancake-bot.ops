@@ -1,0 +1,4 @@
+pancakebot_deploy_path: '/srv/pancake_bot'
+pancakebot_github_repo: 'https://github.com/dwesh163/Pancake-Bot.git'
+pancakebot_env_keybase: '/keybase/team/epfl_idevfsd/pancake-bot/.env'
+pancakebot_docker_name: 'pancake_bot_fsdbot_1'

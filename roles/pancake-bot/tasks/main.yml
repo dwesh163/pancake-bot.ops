@@ -1,0 +1,41 @@
+# - name: Hello World
+#   shell: ls -al /
+
+- include_vars : pancake-bot-vars.yml
+
+- name: Clone pancake-bot repository from (https://github.com/dwesh163/Pancake-Bot.git)
+  ansible.builtin.git:
+    repo: "{{ pancakebot_github_repo }}"
+    dest: "{{ pancakebot_deploy_path }}"
+    force : yes
+
+- name: Change file ownership, group and permissions of /srv/pancake_bot
+  ansible.builtin.file:
+    path: "{{ pancakebot_deploy_path }}"
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Copy .env
+  copy:
+    src: "{{ pancakebot_env_keybase }}"
+    dest: "{{ pancakebot_deploy_path }}"
+
+- name: Install docker-compose
+  become: true
+  apt:
+    package:
+      - docker-compose
+
+- name: Stop and remove container (if already exists)
+  docker_container:
+    name: "{{ pancakebot_docker_name }}"
+    state: absent
+  
+- name: Run docker-compose
+  community.docker.docker_compose:
+    project_src: "{{ pancakebot_deploy_path }}"
+    files:
+      - docker-compose.yml
+    build: true
+
